@@ -2,6 +2,7 @@ package org.thoughtcrime.securesms.contacts;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
@@ -102,6 +103,11 @@ public class ContactSelectionListItem extends LinearLayout implements RecipientM
 
   public void setChecked(boolean selected) {
     this.checkBox.setChecked(selected);
+  }
+
+  /** Overrides the avatar with a custom (already circular) drawable, e.g. a plugin icon. */
+  public void setPluginIcon(Drawable drawable) {
+    this.avatar.setImageDrawable(drawable);
   }
 
   public void unbind(GlideRequests glideRequests) {

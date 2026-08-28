@@ -197,6 +197,7 @@ public class DeltaX {
           manifest.author = author;
           manifest.description = nodeText(root, "description");
           PluginInfo info = new PluginInfo(manifest, null);
+          info.builtinAssetDir = "plugins/" + dir;
           result.add(info);
           builtinAssetDirs.put(info.getPackageName(), "plugins/" + dir);
         } catch (Exception ignored) {

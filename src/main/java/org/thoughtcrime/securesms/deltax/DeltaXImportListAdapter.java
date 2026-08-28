@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.contacts.ContactSelectionListItem;
+import org.thoughtcrime.securesms.deltax.PluginIcons;
 import org.thoughtcrime.securesms.deltax.module.PluginInfo;
 import org.thoughtcrime.securesms.mms.GlideRequests;
 
@@ -109,6 +110,7 @@ public class DeltaXImportListAdapter
           plugin.manifest.description,
           false,
           true);
+      view.setPluginIcon(PluginIcons.getIcon(view.getContext(), plugin));
     }
     holder.item.setOnClickListener(v -> callback.onEntryClicked(entry));
   }

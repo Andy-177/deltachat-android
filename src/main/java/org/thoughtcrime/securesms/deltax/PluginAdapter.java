@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.deltax.PluginIcons;
 import org.thoughtcrime.securesms.deltax.module.PluginInfo;
 
 public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder> {
@@ -80,6 +82,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
     h.name.setText(p.manifest.name);
     h.meta.setText("v" + p.manifest.version + " · " + p.manifest.author);
     h.desc.setText(p.manifest.description != null ? p.manifest.description : "");
+    h.icon.setImageDrawable(PluginIcons.getIcon(ctx, p));
 
     boolean isSelected = selected.contains(p.getPackageName());
     if (selectionMode) {
@@ -137,6 +140,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
   static class ViewHolder extends RecyclerView.ViewHolder {
     View root;
     LinearLayout text;
+    ImageView icon;
     TextView name;
     TextView meta;
     TextView desc;
@@ -148,6 +152,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
       super(v);
       root = v;
       text = (LinearLayout) v.findViewById(R.id.plugin_text);
+      icon = v.findViewById(R.id.plugin_icon);
       name = v.findViewById(R.id.plugin_name);
       meta = v.findViewById(R.id.plugin_meta);
       desc = v.findViewById(R.id.plugin_desc);
