@@ -2,6 +2,6 @@
   "name": "示例插件B",
   "version": "1.0.0",
   "author": "DeltaX",
-  "main": "script/main.lua",
+  "main": "main.lua",
   "description": "官方内置示例插件 B"
 }

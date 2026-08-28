@@ -106,7 +106,7 @@ public class DeltaXImportListAdapter
           null,
           plugin.manifest.name,
           subtitle,
-          null,
+          plugin.manifest.description,
           false,
           true);
     }

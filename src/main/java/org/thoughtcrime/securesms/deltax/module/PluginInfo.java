@@ -24,7 +24,7 @@ public class PluginInfo {
   }
 
   public File getScriptsDir() {
-    return pluginDir;
+    return new File(pluginDir, "scripts");
   }
 
   public File getResourcesDir() {

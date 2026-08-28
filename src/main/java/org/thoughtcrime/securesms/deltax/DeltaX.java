@@ -170,8 +170,8 @@ public class DeltaX {
 
   /**
    * Lists the built-in plugins bundled under {@code assets/plugins/}. Each subdirectory is expected
-   * to contain a {@code manifest.json} (name, version, author, main) and the referenced script
-   * files. These are offered in the plugin import page and installed on demand.
+   * to contain a {@code manifest.json} (name, version, author, main, description) and the
+   * referenced script files. These are offered in the plugin import page and installed on demand.
    */
   public List<PluginInfo> getBuiltinPlugins() {
     List<PluginInfo> result = new ArrayList<>();
