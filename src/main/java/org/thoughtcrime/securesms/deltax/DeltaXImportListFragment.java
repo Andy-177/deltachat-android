@@ -1,6 +1,6 @@
 /*
- * Fragment shown inside the plugin import page. It lists the "Import" row plus every built-in plugin
- * bundled under assets/plugins, and supports filtering them by name through the search toolbar.
+ * Fragment for the plugin import page. Lists the "Import" row plus the built-in plugins bundled in
+ * assets/plugins, and supports filtering them by name through the search toolbar.
  */
 package org.thoughtcrime.securesms.deltax;
 

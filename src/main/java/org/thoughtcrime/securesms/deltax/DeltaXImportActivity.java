@@ -112,7 +112,8 @@ public class DeltaXImportActivity extends PassphraseRequiredActionBarActivity
     }
     boolean ok = deltaX.installBuiltinPlugin(plugin);
     if (ok) {
-      Toast.makeText(this, getString(R.string.deltax_install_success, 1), Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, getString(R.string.deltax_install_success, 1), Toast.LENGTH_SHORT)
+          .show();
       finish();
     } else {
       Toast.makeText(this, R.string.deltax_plugin_installed, Toast.LENGTH_SHORT).show();

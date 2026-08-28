@@ -18,7 +18,8 @@ import org.thoughtcrime.securesms.contacts.ContactSelectionListItem;
 import org.thoughtcrime.securesms.deltax.module.PluginInfo;
 import org.thoughtcrime.securesms.mms.GlideRequests;
 
-public class DeltaXImportListAdapter extends RecyclerView.Adapter<DeltaXImportListAdapter.RowHolder> {
+public class DeltaXImportListAdapter
+    extends RecyclerView.Adapter<DeltaXImportListAdapter.RowHolder> {
 
   /** Sentinel value representing the "Import" action row at the top of the list. */
   public static final Object IMPORT = new Object();
@@ -48,7 +49,8 @@ public class DeltaXImportListAdapter extends RecyclerView.Adapter<DeltaXImportLi
         items.add(plugin);
         continue;
       }
-      String name = plugin.manifest.name == null ? "" : plugin.manifest.name.toLowerCase(Locale.ROOT);
+      String name =
+          plugin.manifest.name == null ? "" : plugin.manifest.name.toLowerCase(Locale.ROOT);
       String author =
           plugin.manifest.author == null ? "" : plugin.manifest.author.toLowerCase(Locale.ROOT);
       if (name.contains(f) || author.contains(f)) {

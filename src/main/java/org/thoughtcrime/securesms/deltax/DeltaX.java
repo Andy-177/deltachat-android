@@ -207,7 +207,7 @@ public class DeltaX {
     return result;
   }
 
-  /** Installs a built-in plugin (previously listed via {@link #getBuiltinPlugins()}) into the account. */
+  /** Installs a built-in plugin into the account (see {@link #getBuiltinPlugins()}). */
   public boolean installBuiltinPlugin(PluginInfo info) {
     String assetDir = builtinAssetDirs.get(info.getPackageName());
     if (assetDir == null) return false;
