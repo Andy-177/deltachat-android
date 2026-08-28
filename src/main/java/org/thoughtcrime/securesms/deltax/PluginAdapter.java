@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.deltax.PluginIcons;
 import org.thoughtcrime.securesms.deltax.module.PluginInfo;
 
 public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder> {
