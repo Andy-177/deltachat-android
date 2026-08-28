@@ -10,7 +10,6 @@ import static org.thoughtcrime.securesms.util.ShareUtil.isRelayingMessageContent
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,8 +37,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.ProfileActivity;
+import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.connect.DcContactsLoader;
 import org.thoughtcrime.securesms.connect.DcEventCenter;
 import org.thoughtcrime.securesms.connect.DcHelper;

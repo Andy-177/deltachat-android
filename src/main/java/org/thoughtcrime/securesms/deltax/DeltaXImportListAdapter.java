@@ -7,12 +7,10 @@ package org.thoughtcrime.securesms.deltax;
 
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import com.b44t.messenger.DcContact;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.connect.DcContactsLoader;
-import org.thoughtcrime.securesms.contacts.ContactSelectionListItem;
 import org.thoughtcrime.securesms.contacts.ContactSelectionListAdapter;
+import org.thoughtcrime.securesms.contacts.ContactSelectionListItem;
 import org.thoughtcrime.securesms.mms.GlideRequests;
 
 public class DeltaXImportListAdapter extends ContactSelectionListAdapter {
