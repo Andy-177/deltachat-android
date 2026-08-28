@@ -3,7 +3,11 @@ package org.thoughtcrime.securesms.deltax;
 import android.content.Context;
 import android.util.Log;
 import com.b44t.messenger.DcContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +15,7 @@ import java.util.Map;
 import org.luaj.vm2.LuaValue;
 import org.thoughtcrime.securesms.connect.DcHelper;
 import org.thoughtcrime.securesms.deltax.module.ConfigManager;
+import org.thoughtcrime.securesms.deltax.module.Manifest;
 import org.thoughtcrime.securesms.deltax.module.PluginInfo;
 import org.thoughtcrime.securesms.deltax.module.PluginLoader;
 import org.thoughtcrime.securesms.deltax.module.PluginPackager;
@@ -33,6 +38,7 @@ public class DeltaX {
 
   private List<PluginInfo> loadedPlugins = new ArrayList<>();
   private boolean initialised = false;
+  private final Map<String, String> builtinAssetDirs = new HashMap<>();
 
   private static final Map<Integer, DeltaX> instances = new HashMap<>();
 
@@ -160,6 +166,100 @@ public class DeltaX {
 
   public List<PluginInfo> getInstalledPlugins() {
     return pluginPackager.getInstalledPlugins();
+  }
+
+  /**
+   * Lists the built-in plugins bundled under {@code assets/plugins/}. Each subdirectory is expected
+   * to contain a {@code manifest.json} (name, version, author, main) and the referenced script
+   * files. These are offered in the plugin import page and installed on demand.
+   */
+  public List<PluginInfo> getBuiltinPlugins() {
+    List<PluginInfo> result = new ArrayList<>();
+    builtinAssetDirs.clear();
+    try {
+      String[] dirs = context.getAssets().list("plugins");
+      if (dirs == null) return result;
+      ObjectMapper mapper = new ObjectMapper();
+      for (String dir : dirs) {
+        if (dir.startsWith(".")) continue;
+        String manifestAsset = "plugins/" + dir + "/manifest.json";
+        try (InputStream in = context.getAssets().open(manifestAsset)) {
+          JsonNode root = mapper.readTree(in);
+          String name = nodeText(root, "name");
+          String version = nodeText(root, "version");
+          String main = nodeText(root, "main");
+          String author = nodeText(root, "author");
+          if (name == null || version == null || main == null || author == null) continue;
+          Manifest manifest = new Manifest();
+          manifest.name = name;
+          manifest.version = version;
+          manifest.main = main;
+          manifest.author = author;
+          manifest.description = nodeText(root, "description");
+          PluginInfo info = new PluginInfo(manifest, null);
+          result.add(info);
+          builtinAssetDirs.put(info.getPackageName(), "plugins/" + dir);
+        } catch (Exception ignored) {
+        }
+      }
+    } catch (Exception ignored) {
+    }
+    return result;
+  }
+
+  /** Installs a built-in plugin (previously listed via {@link #getBuiltinPlugins()}) into the account. */
+  public boolean installBuiltinPlugin(PluginInfo info) {
+    String assetDir = builtinAssetDirs.get(info.getPackageName());
+    if (assetDir == null) return false;
+    File tmp = new File(context.getCacheDir(), "deltax_builtin_" + System.currentTimeMillis());
+    tmp.mkdirs();
+    try {
+      copyAssetDir(assetDir, tmp);
+    } catch (IOException e) {
+      Log.w(TAG, "Failed to stage built-in plugin: " + e.getMessage());
+      deleteRecursive(tmp);
+      return false;
+    }
+    boolean ok = pluginPackager.install(tmp);
+    deleteRecursive(tmp);
+    if (ok) reloadPlugins();
+    return ok;
+  }
+
+  private void copyAssetDir(String assetPath, File dest) throws IOException {
+    String[] entries = context.getAssets().list(assetPath);
+    if (entries == null) return;
+    dest.mkdirs();
+    for (String entry : entries) {
+      String full = assetPath + "/" + entry;
+      String[] sub = context.getAssets().list(full);
+      if (sub != null && sub.length > 0) {
+        copyAssetDir(full, new File(dest, entry));
+      } else {
+        try (InputStream in = context.getAssets().open(full)) {
+          File out = new File(dest, entry);
+          out.getParentFile().mkdirs();
+          java.nio.file.Files.copy(
+              in, out.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        }
+      }
+    }
+  }
+
+  private void deleteRecursive(File dir) {
+    File[] files = dir.listFiles();
+    if (files != null) {
+      for (File f : files) {
+        if (f.isDirectory()) deleteRecursive(f);
+        else f.delete();
+      }
+    }
+    dir.delete();
+  }
+
+  private static String nodeText(JsonNode node, String field) {
+    JsonNode value = node.get(field);
+    return value != null && !value.isNull() ? value.asText() : null;
   }
 
   public int installPluginFromZip(File zip) {

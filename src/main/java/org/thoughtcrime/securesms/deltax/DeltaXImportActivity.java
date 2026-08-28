@@ -1,8 +1,9 @@
 /*
  * Copy of org.thoughtcrime.securesms.ContactSelectionActivity (the page opened by
  * the main page "add" button). The plugin import FAB opens this page, which looks
- * identical to the original but only offers a single "Import" row that triggers the
- * external plugin import flow.
+ * identical to the original but offers the "Import" row plus the built-in plugins
+ * bundled under assets/plugins; the Import row triggers the external plugin import
+ * flow while built-in plugins install into the current account on click.
  */
 package org.thoughtcrime.securesms.deltax;
 
@@ -13,7 +14,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import com.b44t.messenger.DcContact;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -21,11 +21,12 @@ import java.io.OutputStream;
 import org.thoughtcrime.securesms.PassphraseRequiredActionBarActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.components.ContactFilterToolbar;
+import org.thoughtcrime.securesms.deltax.module.PluginInfo;
 import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
 public class DeltaXImportActivity extends PassphraseRequiredActionBarActivity
-    implements DeltaXImportListFragment.OnContactSelectedListener {
+    implements DeltaXImportListFragment.Listener {
 
   private ContactFilterToolbar toolbar;
   private DeltaXImportListFragment contactsFragment;
@@ -78,7 +79,7 @@ public class DeltaXImportActivity extends PassphraseRequiredActionBarActivity
     contactsFragment =
         (DeltaXImportListFragment)
             getSupportFragmentManager().findFragmentById(R.id.contact_selection_list_fragment);
-    contactsFragment.setOnContactSelectedListener(this);
+    contactsFragment.setListener(this);
   }
 
   private void initializeSearch() {
@@ -95,14 +96,28 @@ public class DeltaXImportActivity extends PassphraseRequiredActionBarActivity
   }
 
   @Override
-  public void onContactSelected(int contactId) {
-    if (contactId == DcContact.DC_CONTACT_ID_NEW_GROUP) {
-      openFilePicker();
-    }
+  public void onImportClicked() {
+    openFilePicker();
   }
 
   @Override
-  public void onContactDeselected(int contactId) {}
+  public void onPluginClicked(PluginInfo plugin) {
+    installBuiltin(plugin);
+  }
+
+  private void installBuiltin(PluginInfo plugin) {
+    DeltaX deltaX = DeltaX.getInstance(this);
+    if (!deltaX.isInitialised()) {
+      deltaX.init();
+    }
+    boolean ok = deltaX.installBuiltinPlugin(plugin);
+    if (ok) {
+      Toast.makeText(this, getString(R.string.deltax_install_success, 1), Toast.LENGTH_SHORT).show();
+      finish();
+    } else {
+      Toast.makeText(this, R.string.deltax_plugin_installed, Toast.LENGTH_SHORT).show();
+    }
+  }
 
   private void openFilePicker() {
     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

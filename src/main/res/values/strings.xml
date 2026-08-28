@@ -1332,4 +1332,5 @@
     <string name="deltax_search_option_version">Search version</string>
     <string name="deltax_search_option_package">Search package</string>
     <string name="deltax_import_plugin">Import</string>
+    <string name="deltax_plugin_installed">Plugin already installed</string>
 </resources>

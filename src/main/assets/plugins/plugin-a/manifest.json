@@ -1,0 +1,7 @@
+{
+  "name": "示例插件A",
+  "version": "1.0.0",
+  "author": "DeltaX",
+  "main": "script/main.lua",
+  "description": "官方内置示例插件 A"
+}
