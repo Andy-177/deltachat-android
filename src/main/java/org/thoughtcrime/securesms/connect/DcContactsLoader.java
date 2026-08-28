@@ -68,7 +68,7 @@ public class DcContactsLoader extends AsyncLoader<DcContactsLoader.Ret> {
   public static class Ret {
     public final int[] ids;
 
-    Ret(int[] ids) {
+    public Ret(int[] ids) {
       this.ids = ids;
     }
   }

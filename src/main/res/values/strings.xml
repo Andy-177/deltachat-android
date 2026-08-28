@@ -1331,4 +1331,5 @@
     <string name="deltax_search_option_author">Search author</string>
     <string name="deltax_search_option_version">Search version</string>
     <string name="deltax_search_option_package">Search package</string>
+    <string name="deltax_import_plugin">Import</string>
 </resources>

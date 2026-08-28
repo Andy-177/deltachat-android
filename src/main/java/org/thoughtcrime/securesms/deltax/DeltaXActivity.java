@@ -1,7 +1,6 @@
 package org.thoughtcrime.securesms.deltax;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,8 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
@@ -26,9 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.b44t.messenger.DcContext;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,7 +52,6 @@ public class DeltaXActivity extends BaseActionBarActivity
   private RecyclerView recycler;
   private TextView emptyView;
   private PluginAdapter adapter;
-  private ActivityResultLauncher<Intent> pickerLauncher;
 
   private boolean selectionActive = false;
   private final Set<String> selectedIds = new HashSet<>();
@@ -101,7 +94,7 @@ public class DeltaXActivity extends BaseActionBarActivity
     emptyView = findViewById(R.id.deltax_empty);
 
     View fab = findViewById(R.id.deltax_fab);
-    fab.setOnClickListener(v -> openFilePicker());
+    fab.setOnClickListener(v -> startActivity(new Intent(this, DeltaXImportActivity.class)));
     ViewCompat.setOnApplyWindowInsetsListener(
         fab,
         (v, insets) -> {
@@ -141,18 +134,15 @@ public class DeltaXActivity extends BaseActionBarActivity
           }
         });
 
-    pickerLauncher =
-        registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-              if (result.getResultCode() == RESULT_OK
-                  && result.getData() != null
-                  && result.getData().getData() != null) {
-                installFromUri(result.getData().getData());
-              }
-            });
-
     refresh();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (deltaX != null && deltaX.isInitialised()) {
+      refresh();
+    }
   }
 
   private void initializeFieldSelection() {
@@ -197,51 +187,6 @@ public class DeltaXActivity extends BaseActionBarActivity
       default:
         editText.setHint(R.string.deltax_search_by_name);
         break;
-    }
-  }
-
-  private void openFilePicker() {
-    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-    intent.addCategory(Intent.CATEGORY_OPENABLE);
-    intent.setType("application/zip");
-    try {
-      pickerLauncher.launch(Intent.createChooser(intent, getString(R.string.deltax_install)));
-    } catch (android.content.ActivityNotFoundException e) {
-      Toast.makeText(this, R.string.deltax_install_failed, Toast.LENGTH_SHORT).show();
-    }
-  }
-
-  private void installFromUri(Uri uri) {
-    File tmp = new File(getCacheDir(), "deltax_install_" + System.currentTimeMillis() + ".zip");
-    try (InputStream in = getContentResolver().openInputStream(uri);
-        OutputStream out = new FileOutputStream(tmp)) {
-      byte[] buf = new byte[8192];
-      int len;
-      while ((len = in.read(buf)) != -1) out.write(buf, 0, len);
-    } catch (Exception e) {
-      if (tmp.exists()) tmp.delete();
-      Toast.makeText(this, R.string.deltax_install_failed, Toast.LENGTH_SHORT).show();
-      return;
-    }
-    if (deltaX.isBackupPackage(tmp)) {
-      boolean ok = deltaX.restoreBackupFromZip(tmp);
-      if (tmp.exists()) tmp.delete();
-      refresh();
-      if (ok) {
-        Toast.makeText(this, R.string.deltax_restore_success, Toast.LENGTH_SHORT).show();
-      } else {
-        Toast.makeText(this, R.string.deltax_restore_failed, Toast.LENGTH_SHORT).show();
-      }
-    } else {
-      int n = deltaX.installPluginFromZip(tmp);
-      if (tmp.exists()) tmp.delete();
-      refresh();
-      if (n > 0) {
-        Toast.makeText(this, getString(R.string.deltax_install_success, n), Toast.LENGTH_SHORT)
-            .show();
-      } else {
-        Toast.makeText(this, R.string.deltax_install_failed, Toast.LENGTH_SHORT).show();
-      }
     }
   }
 
