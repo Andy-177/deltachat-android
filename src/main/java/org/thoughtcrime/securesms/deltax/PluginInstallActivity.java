@@ -53,7 +53,8 @@ public class PluginInstallActivity extends PassphraseRequiredActionBarActivity {
     setContentView(R.layout.plugin_install_activity);
 
     ViewUtil.applyWindowInsets(findViewById(R.id.install_root), true, false, true, false);
-    ViewUtil.applyWindowInsetsAsMargin(findViewById(R.id.install_button_bar), false, false, false, true);
+    ViewUtil.applyWindowInsetsAsMargin(
+        findViewById(R.id.install_button_bar), false, false, false, true);
 
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
