@@ -300,11 +300,7 @@ public class PluginPackager {
     return count;
   }
 
-  /**
-   * Returns the plugin directories contained in {@code root}: the root itself when it has a
-   * manifest,
-   * otherwise each immediate subdirectory that has one. Used to preview plugins before installing.
-   */
+  /** Returns the plugin dirs inside {@code root}: itself, or each subdir that has a manifest. */
   public List<File> findPluginDirectories(File root) {
     List<File> result = new ArrayList<>();
     if (new File(root, "manifest.json").exists()) {
@@ -322,11 +318,7 @@ public class PluginPackager {
     return result;
   }
 
-  /**
-   * Unpacks a plugin package into a temporary directory and returns the contained plugin
-   * directories,
-   * without installing them. The caller is responsible for deleting the directories afterwards.
-   */
+  /** Unpacks a plugin package to a temp dir, returns contained plugin dirs (not installed). */
   public List<File> extractPluginDirectories(File zip) {
     if (zip == null || !zip.exists() || !zip.getName().toLowerCase().endsWith(".zip")) {
       return new ArrayList<>();

@@ -30,7 +30,7 @@ public class PluginInfo {
   }
 
   public File getScriptsDir() {
-    return new File(pluginDir, "scripts");
+    return new File(pluginDir, "script");
   }
 
   public File getResourcesDir() {
@@ -60,11 +60,7 @@ public class PluginInfo {
     return null;
   }
 
-  /**
-   * Reads the optional plain-text detailed description from the plugin root, checking (in order)
-   * README.txt, README, readme.txt and readme. The content is returned verbatim without any
-   * parsing.
-   */
+  /** Reads the optional plain-text README from the plugin root, verbatim (no parsing). */
   public static String readReadme(File dir) {
     String[] names = {"README.txt", "README", "readme.txt", "readme"};
     for (String name : names) {

@@ -208,10 +208,7 @@ public class DeltaX {
     return result;
   }
 
-  /**
-   * Stages a built-in plugin into a temporary directory so its details can be previewed before
-   * install.
-   */
+  /** Stages a built-in plugin in a temp dir so its details can be previewed before install. */
   public File stageBuiltinPlugin(PluginInfo info) {
     String assetDir = builtinAssetDirs.get(info.getPackageName());
     if (assetDir == null) return null;
