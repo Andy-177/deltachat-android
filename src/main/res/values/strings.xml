@@ -1333,4 +1333,12 @@
     <string name="deltax_search_option_package">Search package</string>
     <string name="deltax_import_plugin">Import</string>
     <string name="deltax_plugin_installed">Plugin already installed</string>
+    <string name="deltax_install_title">Install %1$s</string>
+    <string name="deltax_plugin_meta">%1$s · %2$s</string>
+    <string name="deltax_plugin_no_readme">(No detailed description)</string>
+    <string name="deltax_plugin_readme">Detailed description</string>
+    <string name="deltax_view_details">View details</string>
+    <string name="deltax_enable">Enable</string>
+    <string name="deltax_disable">Disable</string>
+    <string name="deltax_more">More</string>
 </resources>

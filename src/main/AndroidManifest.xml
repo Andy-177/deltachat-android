@@ -326,6 +326,13 @@
             android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize" />
 
         <activity
+            android:name=".deltax.PluginInstallActivity"
+            android:theme="@style/TextSecure.LightNoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            android:exported="false"
+            android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize" />
+
+        <activity
             android:name=".deltax.DeltaXPluginActivity"
             android:label="@string/deltax_title"
             android:windowSoftInputMode="stateHidden"

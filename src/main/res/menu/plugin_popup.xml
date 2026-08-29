@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_view_details"
+        android:title="@string/deltax_view_details" />
+    <item
+        android:id="@+id/action_toggle"
+        android:title="@string/deltax_enable" />
+    <item
+        android:id="@+id/action_uninstall"
+        android:title="@string/deltax_uninstall" />
+</menu>

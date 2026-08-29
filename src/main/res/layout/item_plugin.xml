@@ -87,6 +87,14 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/deltax_uninstall" />
 
+            <ImageButton
+                android:id="@+id/plugin_more"
+                style="?attr/actionOverflowButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:contentDescription="@string/deltax_more" />
+
             <CheckBox
                 android:id="@+id/plugin_check"
                 android:layout_width="wrap_content"

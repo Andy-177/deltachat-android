@@ -228,6 +228,15 @@ public class DeltaXActivity extends BaseActionBarActivity
   }
 
   @Override
+  public void onViewDetails(PluginInfo plugin) {
+    if (plugin.pluginDir == null) return;
+    Intent intent = new Intent(this, PluginInstallActivity.class);
+    intent.putExtra(PluginInstallActivity.EXTRA_VIEW_DIR, plugin.pluginDir.getAbsolutePath());
+    intent.putExtra(PluginInstallActivity.EXTRA_VIEW_MODE, true);
+    startActivity(intent);
+  }
+
+  @Override
   public void onOpen(PluginInfo plugin) {
     Intent intent = new Intent(this, DeltaXPluginActivity.class);
     intent.putExtra(DeltaXPluginActivity.EXTRA_PACKAGE, plugin.getPackageName());

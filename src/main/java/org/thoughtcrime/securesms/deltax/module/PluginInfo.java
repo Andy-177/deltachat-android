@@ -60,6 +60,27 @@ public class PluginInfo {
     return null;
   }
 
+  /**
+   * Reads the optional plain-text detailed description from the plugin root, checking (in order)
+   * README.txt, README, readme.txt and readme. The content is returned verbatim without any
+   * parsing.
+   */
+  public static String readReadme(File dir) {
+    String[] names = {"README.txt", "README", "readme.txt", "readme"};
+    for (String name : names) {
+      File file = new File(dir, name);
+      if (file.exists()) {
+        try {
+          byte[] bytes = java.nio.file.Files.readAllBytes(file.toPath());
+          return new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+        } catch (IOException ignored) {
+          return null;
+        }
+      }
+    }
+    return null;
+  }
+
   @Override
   public String toString() {
     return getPackageName();

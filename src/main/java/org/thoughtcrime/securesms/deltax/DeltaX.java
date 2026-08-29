@@ -208,10 +208,13 @@ public class DeltaX {
     return result;
   }
 
-  /** Installs a built-in plugin into the account (see {@link #getBuiltinPlugins()}). */
-  public boolean installBuiltinPlugin(PluginInfo info) {
+  /**
+   * Stages a built-in plugin into a temporary directory so its details can be previewed before
+   * install.
+   */
+  public File stageBuiltinPlugin(PluginInfo info) {
     String assetDir = builtinAssetDirs.get(info.getPackageName());
-    if (assetDir == null) return false;
+    if (assetDir == null) return null;
     File tmp = new File(context.getCacheDir(), "deltax_builtin_" + System.currentTimeMillis());
     tmp.mkdirs();
     try {
@@ -219,12 +222,9 @@ public class DeltaX {
     } catch (IOException e) {
       Log.w(TAG, "Failed to stage built-in plugin: " + e.getMessage());
       deleteRecursive(tmp);
-      return false;
+      return null;
     }
-    boolean ok = pluginPackager.install(tmp);
-    deleteRecursive(tmp);
-    if (ok) reloadPlugins();
-    return ok;
+    return tmp;
   }
 
   private void copyAssetDir(String assetPath, File dest) throws IOException {
@@ -261,12 +261,6 @@ public class DeltaX {
   private static String nodeText(JsonNode node, String field) {
     JsonNode value = node.get(field);
     return value != null && !value.isNull() ? value.asText() : null;
-  }
-
-  public int installPluginFromZip(File zip) {
-    int n = pluginPackager.installFromZip(zip);
-    reloadPlugins();
-    return n;
   }
 
   public boolean uninstallPlugin(String packageName) {

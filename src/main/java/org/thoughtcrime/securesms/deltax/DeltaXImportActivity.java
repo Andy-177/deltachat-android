@@ -3,7 +3,7 @@
  * the main page "add" button). The plugin import FAB opens this page, which looks
  * identical to the original but offers the "Import" row plus the built-in plugins
  * bundled under assets/plugins; the Import row triggers the external plugin import
- * flow while built-in plugins install into the current account on click.
+ * flow while built-in plugins open an install preview page on click.
  */
 package org.thoughtcrime.securesms.deltax;
 
@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import org.thoughtcrime.securesms.PassphraseRequiredActionBarActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.components.ContactFilterToolbar;
@@ -102,22 +104,22 @@ public class DeltaXImportActivity extends PassphraseRequiredActionBarActivity
 
   @Override
   public void onPluginClicked(PluginInfo plugin) {
-    installBuiltin(plugin);
-  }
-
-  private void installBuiltin(PluginInfo plugin) {
     DeltaX deltaX = DeltaX.getInstance(this);
     if (!deltaX.isInitialised()) {
       deltaX.init();
     }
-    boolean ok = deltaX.installBuiltinPlugin(plugin);
-    if (ok) {
-      Toast.makeText(this, getString(R.string.deltax_install_success, 1), Toast.LENGTH_SHORT)
-          .show();
-      finish();
-    } else {
-      Toast.makeText(this, R.string.deltax_plugin_installed, Toast.LENGTH_SHORT).show();
+    File staged = deltaX.stageBuiltinPlugin(plugin);
+    if (staged == null) {
+      Toast.makeText(this, R.string.deltax_install_failed, Toast.LENGTH_SHORT).show();
+      return;
     }
+    ArrayList<String> dirs = new ArrayList<>();
+    dirs.add(staged.getAbsolutePath());
+    Intent intent = new Intent(this, PluginInstallActivity.class);
+    intent.putStringArrayListExtra(PluginInstallActivity.EXTRA_DIRS, dirs);
+    intent.putExtra(PluginInstallActivity.EXTRA_VIEW_MODE, false);
+    startActivity(intent);
+    finish();
   }
 
   private void openFilePicker() {
@@ -152,13 +154,17 @@ public class DeltaXImportActivity extends PassphraseRequiredActionBarActivity
         Toast.makeText(this, R.string.deltax_restore_failed, Toast.LENGTH_SHORT).show();
       }
     } else {
-      int n = deltaX.installPluginFromZip(tmp);
+      List<File> staged = deltaX.getPluginPackager().extractPluginDirectories(tmp);
       if (tmp.exists()) tmp.delete();
-      if (n > 0) {
-        Toast.makeText(this, getString(R.string.deltax_install_success, n), Toast.LENGTH_SHORT)
-            .show();
-      } else {
+      if (staged.isEmpty()) {
         Toast.makeText(this, R.string.deltax_install_failed, Toast.LENGTH_SHORT).show();
+      } else {
+        ArrayList<String> dirs = new ArrayList<>();
+        for (File dir : staged) dirs.add(dir.getAbsolutePath());
+        Intent intent = new Intent(this, PluginInstallActivity.class);
+        intent.putStringArrayListExtra(PluginInstallActivity.EXTRA_DIRS, dirs);
+        intent.putExtra(PluginInstallActivity.EXTRA_VIEW_MODE, false);
+        startActivity(intent);
       }
     }
     finish();

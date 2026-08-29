@@ -1308,4 +1308,12 @@
     <string name="deltax_search_option_package">搜索包名</string>
     <string name="deltax_import_plugin">导入</string>
     <string name="deltax_plugin_installed">插件已安装</string>
+    <string name="deltax_install_title">安装%s</string>
+    <string name="deltax_plugin_meta">%1$s · %2$s</string>
+    <string name="deltax_plugin_no_readme">（无详细说明）</string>
+    <string name="deltax_plugin_readme">详细说明</string>
+    <string name="deltax_view_details">查看详情</string>
+    <string name="deltax_enable">启用</string>
+    <string name="deltax_disable">禁用</string>
+    <string name="deltax_more">更多</string>
 </resources>

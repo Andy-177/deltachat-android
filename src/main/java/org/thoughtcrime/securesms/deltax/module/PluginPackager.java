@@ -300,6 +300,49 @@ public class PluginPackager {
     return count;
   }
 
+  /**
+   * Returns the plugin directories contained in {@code root}: the root itself when it has a
+   * manifest,
+   * otherwise each immediate subdirectory that has one. Used to preview plugins before installing.
+   */
+  public List<File> findPluginDirectories(File root) {
+    List<File> result = new ArrayList<>();
+    if (new File(root, "manifest.json").exists()) {
+      result.add(root);
+      return result;
+    }
+    File[] subs = root.listFiles();
+    if (subs != null) {
+      for (File sub : subs) {
+        if (sub.isDirectory() && new File(sub, "manifest.json").exists()) {
+          result.add(sub);
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Unpacks a plugin package into a temporary directory and returns the contained plugin
+   * directories,
+   * without installing them. The caller is responsible for deleting the directories afterwards.
+   */
+  public List<File> extractPluginDirectories(File zip) {
+    if (zip == null || !zip.exists() || !zip.getName().toLowerCase().endsWith(".zip")) {
+      return new ArrayList<>();
+    }
+    File tmp = new File(pluginsDir, ".install_" + System.currentTimeMillis());
+    tmp.mkdirs();
+    try {
+      unzip(zip, tmp);
+      return findPluginDirectories(tmp);
+    } catch (IOException e) {
+      Log.w(TAG, "Failed to extract plugin package: " + e.getMessage());
+      deleteRecursive(tmp);
+      return new ArrayList<>();
+    }
+  }
+
   private void unzip(File zip, File dest) throws IOException {
     dest.mkdirs();
     byte[] buffer = new byte[8192];
