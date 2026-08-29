@@ -65,11 +65,21 @@
                 android:ellipsize="end"
                 android:textColor="?android:attr/textColorSecondary" />
 
+            <TextView
+                android:id="@+id/plugin_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/deltax_view_details"
+                android:textSize="13sp"
+                android:textColor="?attr/colorAccent"
+                android:visibility="gone" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
@@ -84,16 +94,8 @@
                 style="?attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/deltax_uninstall" />
-
-            <ImageButton
-                android:id="@+id/plugin_more"
-                style="?attr/actionOverflowButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:contentDescription="@string/deltax_more" />
 
             <CheckBox
                 android:id="@+id/plugin_check"

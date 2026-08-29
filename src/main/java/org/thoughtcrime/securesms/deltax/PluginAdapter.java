@@ -4,15 +4,12 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
@@ -92,7 +89,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
     if (selectionMode) {
       h.sw.setVisibility(View.GONE);
       h.uninstall.setVisibility(View.GONE);
-      h.more.setVisibility(View.GONE);
+      h.details.setVisibility(View.GONE);
       h.desc.setVisibility(View.GONE);
       h.check.setVisibility(View.VISIBLE);
       h.check.setChecked(isSelected);
@@ -108,10 +105,12 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
       h.desc.setVisibility(View.VISIBLE);
       h.text.setGravity(Gravity.START);
       h.text.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-      h.sw.setVisibility(View.GONE);
-      h.uninstall.setVisibility(View.GONE);
-      h.more.setVisibility(View.VISIBLE);
-      h.more.setOnClickListener(v -> showMenu(v, p, dx));
+      h.sw.setVisibility(View.VISIBLE);
+      h.uninstall.setVisibility(View.VISIBLE);
+      h.details.setVisibility(View.VISIBLE);
+      boolean disabled = dx.isPluginDisabled(p.getPackageName());
+      h.sw.setChecked(!disabled);
+      h.details.setOnClickListener(v -> listener.onViewDetails(p));
       h.root.setBackgroundResource(selectableBackground(ctx));
     }
 
@@ -121,32 +120,8 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
           listener.onItemLongClick(p);
           return true;
         });
+    h.sw.setOnCheckedChangeListener((v, checked) -> listener.onToggle(p, checked));
     h.uninstall.setOnClickListener(v -> listener.onUninstall(p));
-  }
-
-  private void showMenu(View anchor, PluginInfo plugin, DeltaX deltaX) {
-    Context ctx = anchor.getContext();
-    PopupMenu popup = new PopupMenu(ctx, anchor);
-    popup.getMenuInflater().inflate(R.menu.plugin_popup, popup.getMenu());
-    boolean disabled = deltaX.isPluginDisabled(plugin.getPackageName());
-    MenuItem toggle = popup.getMenu().findItem(R.id.action_toggle);
-    toggle.setTitle(disabled ? R.string.deltax_enable : R.string.deltax_disable);
-    popup.setOnMenuItemClickListener(
-        item -> {
-          int id = item.getItemId();
-          if (id == R.id.action_view_details) {
-            listener.onViewDetails(plugin);
-            return true;
-          } else if (id == R.id.action_toggle) {
-            listener.onToggle(plugin, disabled);
-            return true;
-          } else if (id == R.id.action_uninstall) {
-            listener.onUninstall(plugin);
-            return true;
-          }
-          return false;
-        });
-    popup.show();
   }
 
   @Override
@@ -175,7 +150,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
     TextView desc;
     SwitchCompat sw;
     Button uninstall;
-    ImageButton more;
+    TextView details;
     CheckBox check;
 
     ViewHolder(View v) {
@@ -188,7 +163,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
       desc = v.findViewById(R.id.plugin_desc);
       sw = v.findViewById(R.id.plugin_switch);
       uninstall = v.findViewById(R.id.plugin_uninstall);
-      more = v.findViewById(R.id.plugin_more);
+      details = v.findViewById(R.id.plugin_details);
       check = v.findViewById(R.id.plugin_check);
     }
   }
