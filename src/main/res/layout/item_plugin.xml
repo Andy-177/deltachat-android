@@ -65,23 +65,13 @@
                 android:ellipsize="end"
                 android:textColor="?android:attr/textColorSecondary" />
 
-            <TextView
-                android:id="@+id/plugin_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/deltax_view_details"
-                android:textSize="13sp"
-                android:textColor="?attr/colorAccent"
-                android:visibility="gone" />
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:gravity="center_vertical">
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/plugin_switch"
@@ -89,13 +79,31 @@
                 android:layout_height="wrap_content"
                 android:focusable="false" />
 
-            <Button
-                android:id="@+id/plugin_uninstall"
-                style="?attr/buttonBarButtonStyle"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/deltax_uninstall" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/plugin_uninstall"
+                    style="?attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deltax_uninstall" />
+
+                <TextView
+                    android:id="@+id/plugin_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/deltax_view_details"
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorAccent"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <CheckBox
                 android:id="@+id/plugin_check"
