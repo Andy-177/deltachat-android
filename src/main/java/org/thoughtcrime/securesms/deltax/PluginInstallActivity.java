@@ -17,6 +17,7 @@ import org.thoughtcrime.securesms.deltax.module.Manifest;
 import org.thoughtcrime.securesms.deltax.module.PluginInfo;
 import org.thoughtcrime.securesms.deltax.module.PluginPackager;
 import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme;
+import org.thoughtcrime.securesms.util.ViewUtil;
 
 /**
  * Shows a plugin's details (icon, name, author, version, description and README) before it is
@@ -50,6 +51,9 @@ public class PluginInstallActivity extends PassphraseRequiredActionBarActivity {
   @Override
   protected void onCreate(Bundle icicle, boolean ready) {
     setContentView(R.layout.plugin_install_activity);
+
+    ViewUtil.applyWindowInsets(findViewById(R.id.install_root), true, false, true, false);
+    ViewUtil.applyWindowInsetsAsMargin(findViewById(R.id.install_button_bar), false, false, false, true);
 
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
