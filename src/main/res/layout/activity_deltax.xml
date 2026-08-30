@@ -30,7 +30,7 @@
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:paddingStart="1dp"
+                android:paddingStart="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp">
 
