@@ -99,6 +99,10 @@ public class DeltaXImportActivity extends PassphraseRequiredActionBarActivity
 
   @Override
   public void onImportClicked() {
+    if (!deltaX.isImportPluginEnabled()) {
+      Toast.makeText(this, R.string.deltax_import_disabled, Toast.LENGTH_SHORT).show();
+      return;
+    }
     openFilePicker();
   }
 

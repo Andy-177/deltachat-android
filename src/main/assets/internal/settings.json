@@ -1,0 +1,7 @@
+{
+    "beta_features":{
+        "plugin":{
+            "import_plugin":false
+        }
+    }
+}

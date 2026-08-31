@@ -1307,6 +1307,7 @@
     <string name="deltax_search_option_version">搜索版本</string>
     <string name="deltax_search_option_package">搜索包名</string>
     <string name="deltax_import_plugin">导入</string>
+    <string name="deltax_import_disabled">此功能已被禁用</string>
     <string name="deltax_plugin_installed">插件已安装</string>
     <string name="deltax_install_title">安装%s</string>
     <string name="deltax_plugin_meta">%1$s · %2$s</string>

@@ -298,4 +298,20 @@ public class DeltaX {
     LuaValue onOpen = plugin.globals.get("onOpen");
     return onOpen.isfunction();
   }
+
+  /**
+   * Reads {@code beta_features.plugin.import_plugin} from {@code assets/internal/settings.json}.
+   * When false, only the plugins bundled under {@code assets/plugins/} may be used and the external
+   * plugin import flow is disabled. Defaults to false when the setting cannot be determined.
+   */
+  public boolean isImportPluginEnabled() {
+    try (InputStream in = context.getAssets().open("internal/settings.json")) {
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode root = mapper.readTree(in);
+      JsonNode value = root.at("/beta_features/plugin/import_plugin");
+      return value != null && value.isBoolean() && value.asBoolean();
+    } catch (Exception ignored) {
+      return false;
+    }
+  }
 }
