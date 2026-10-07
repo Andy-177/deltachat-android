@@ -593,6 +593,87 @@ JNIEXPORT jint Java_com_b44t_messenger_DcContext_createBroadcastList(JNIEnv *env
 }
 
 
+JNIEXPORT jint Java_com_b44t_messenger_DcContext_createChatroom(JNIEnv *env, jobject obj, jstring name)
+{
+    CHAR_REF(name);
+        jint ret = (jint)dc_create_chatroom(get_dc_context(env, obj), namePtr);
+    CHAR_UNREF(name);
+    return ret;
+}
+
+
+JNIEXPORT jintArray Java_com_b44t_messenger_DcContext_getPermissionGroupIds(JNIEnv *env, jobject obj, jint chat_id)
+{
+    dc_array_t* ca = dc_get_permission_group_ids(get_dc_context(env, obj), chat_id);
+    return dc_array2jintArray_n_unref(env, ca);
+}
+
+
+JNIEXPORT jstring Java_com_b44t_messenger_DcContext_getPermissionGroupName(JNIEnv *env, jobject obj, jint chat_id, jint group_id)
+{
+    char* temp = dc_get_permission_group_name(get_dc_context(env, obj), chat_id, group_id);
+    jstring ret = JSTRING_NEW(temp);
+    dc_str_unref(temp);
+    return ret;
+}
+
+
+JNIEXPORT jstring Java_com_b44t_messenger_DcContext_getPermissionGroupPermissions(JNIEnv *env, jobject obj, jint chat_id, jint group_id)
+{
+    char* temp = dc_get_permission_group_permissions(get_dc_context(env, obj), chat_id, group_id);
+    jstring ret = JSTRING_NEW(temp);
+    dc_str_unref(temp);
+    return ret;
+}
+
+
+JNIEXPORT jint Java_com_b44t_messenger_DcContext_createPermissionGroup(JNIEnv *env, jobject obj, jint chat_id, jstring name, jstring permissions)
+{
+    CHAR_REF(name);
+    CHAR_REF(permissions);
+        jint ret = (jint)dc_create_permission_group(get_dc_context(env, obj), chat_id, namePtr, permissionsPtr);
+    CHAR_UNREF(permissions);
+    CHAR_UNREF(name);
+    return ret;
+}
+
+
+JNIEXPORT jint Java_com_b44t_messenger_DcContext_setPermissionGroup(JNIEnv *env, jobject obj, jint chat_id, jint group_id, jstring name, jstring permissions)
+{
+    CHAR_REF(name);
+    CHAR_REF(permissions);
+        jint ret = (jint)dc_set_permission_group(get_dc_context(env, obj), chat_id, group_id, namePtr, permissionsPtr);
+    CHAR_UNREF(permissions);
+    CHAR_UNREF(name);
+    return ret;
+}
+
+
+JNIEXPORT jint Java_com_b44t_messenger_DcContext_deletePermissionGroup(JNIEnv *env, jobject obj, jint chat_id, jint group_id)
+{
+    return (jint)dc_delete_permission_group(get_dc_context(env, obj), chat_id, group_id);
+}
+
+
+JNIEXPORT jintArray Java_com_b44t_messenger_DcContext_getPermissionGroupMembers(JNIEnv *env, jobject obj, jint chat_id, jint group_id)
+{
+    dc_array_t* ca = dc_get_permission_group_members(get_dc_context(env, obj), chat_id, group_id);
+    return dc_array2jintArray_n_unref(env, ca);
+}
+
+
+JNIEXPORT jint Java_com_b44t_messenger_DcContext_assignPermissionGroup(JNIEnv *env, jobject obj, jint chat_id, jint group_id, jint contact_id)
+{
+    return (jint)dc_assign_permission_group(get_dc_context(env, obj), chat_id, group_id, contact_id);
+}
+
+
+JNIEXPORT jint Java_com_b44t_messenger_DcContext_revokePermissionGroup(JNIEnv *env, jobject obj, jint chat_id, jint group_id, jint contact_id)
+{
+    return (jint)dc_revoke_permission_group(get_dc_context(env, obj), chat_id, group_id, contact_id);
+}
+
+
 JNIEXPORT jboolean Java_com_b44t_messenger_DcContext_isContactInChat(JNIEnv *env, jobject obj, jint chat_id, jint contact_id)
 {
     return (jboolean)dc_is_contact_in_chat(get_dc_context(env, obj), chat_id, contact_id);
@@ -1322,6 +1403,12 @@ JNIEXPORT jboolean Java_com_b44t_messenger_DcContext_setChatMuteDuration(JNIEnv 
 JNIEXPORT jboolean Java_com_b44t_messenger_DcChat_isMuted(JNIEnv *env, jobject obj)
 {
     return dc_chat_is_muted(get_dc_chat(env, obj));
+}
+
+
+JNIEXPORT jboolean Java_com_b44t_messenger_DcChat_isChatroom(JNIEnv *env, jobject obj)
+{
+    return (jboolean)dc_chat_is_chatroom(get_dc_chat(env, obj));
 }
 
 

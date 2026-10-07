@@ -15,6 +15,7 @@ public class DcContact {
   public static final int DC_CONTACT_ID_ADD_ACCOUNT = -6; //      - " -
   public static final int DC_CONTACT_ID_NEW_UNENCRYPTED_GROUP = -7; //      - " -
   public static final int DC_CONTACT_ID_INVITE_LINK = -8;
+  public static final int DC_CONTACT_ID_NEW_CHATROOM = -9; // used by the UI, not valid to the core
 
   public static final int DC_FRESHNESS_NORMAL = 0;
   public static final int DC_FRESHNESS_RECENTLY_SEEN = 1;

@@ -66,6 +66,8 @@ public class DcChat {
 
   public native boolean isMuted();
 
+  public native boolean isChatroom();
+
   public native boolean isContactRequest();
 
   // aliases and higher-level tools

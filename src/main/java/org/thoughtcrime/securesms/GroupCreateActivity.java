@@ -49,6 +49,7 @@ public class GroupCreateActivity extends PassphraseRequiredActionBarActivity
   private static final String TAG = "GroupCreateActivity";
   public static final String EDIT_GROUP_CHAT_ID = "edit_group_chat_id";
   public static final String CREATE_BROADCAST = "create_broadcast";
+  public static final String CREATE_CHATROOM = "create_chatroom";
   public static final String UNENCRYPTED = "unencrypted";
   public static final String CLONE_CHAT_EXTRA = "clone_chat";
 
@@ -59,6 +60,7 @@ public class GroupCreateActivity extends PassphraseRequiredActionBarActivity
 
   private boolean unencrypted;
   private boolean broadcast;
+  private boolean chatroom;
   private EditText groupName;
   private EditText chatDescription;
   private ListView lv;
@@ -76,6 +78,7 @@ public class GroupCreateActivity extends PassphraseRequiredActionBarActivity
     setContentView(R.layout.group_create_activity);
     broadcast = getIntent().getBooleanExtra(CREATE_BROADCAST, false);
     unencrypted = getIntent().getBooleanExtra(UNENCRYPTED, false);
+    chatroom = getIntent().getBooleanExtra(CREATE_CHATROOM, false);
     Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
 
@@ -121,6 +124,8 @@ public class GroupCreateActivity extends PassphraseRequiredActionBarActivity
     String title;
     if (isEdit()) {
       title = getString(R.string.global_menu_edit_desktop);
+    } else if (chatroom) {
+      title = getString(R.string.new_chatroom);
     } else if (broadcast) {
       title = getString(R.string.new_channel);
     } else if (unencrypted) {
@@ -274,7 +279,12 @@ public class GroupCreateActivity extends PassphraseRequiredActionBarActivity
     int accId;
     try {
       accId = rpc.getSelectedAccountId();
-      if (broadcast) {
+      if (chatroom) {
+        groupChatId = dcContext.createChatroom(groupName);
+        if (groupChatId == 0) {
+          return;
+        }
+      } else if (broadcast) {
         groupChatId = rpc.createBroadcast(accId, groupName);
       } else if (unencrypted) {
         groupChatId = rpc.createGroupChatUnencrypted(accId, groupName);

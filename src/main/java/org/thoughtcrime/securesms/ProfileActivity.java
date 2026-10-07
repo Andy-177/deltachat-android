@@ -109,6 +109,7 @@ public class ProfileActivity extends PassphraseRequiredActionBarActivity
 
       if (chatId != 0) {
         DcChat dcChat = dcContext.getChat(chatId);
+        menu.findItem(R.id.menu_permission_groups).setVisible(dcChat.isChatroom());
         menu.findItem(R.id.menu_clone)
             .setVisible(
                 chatIsMultiUser && !chatIsInBroadcast && !chatIsOutBroadcast && !chatIsMailingList);
@@ -129,6 +130,7 @@ public class ProfileActivity extends PassphraseRequiredActionBarActivity
         }
       } else {
         menu.findItem(R.id.menu_clone).setVisible(false);
+        menu.findItem(R.id.menu_permission_groups).setVisible(false);
         canReceive = false;
       }
 
@@ -249,9 +251,17 @@ public class ProfileActivity extends PassphraseRequiredActionBarActivity
       onBlockContact();
     } else if (itemId == R.id.menu_clone) {
       onClone();
+    } else if (itemId == R.id.menu_permission_groups) {
+      onPermissionGroups();
     }
 
     return false;
+  }
+
+  private void onPermissionGroups() {
+    Intent intent = new Intent(this, ChatroomPermissionsActivity.class);
+    intent.putExtra(ChatroomPermissionsActivity.CHAT_ID_EXTRA, chatId);
+    startActivity(intent);
   }
 
   private void onNotifyOnOff() {

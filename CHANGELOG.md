@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Add chatroom creation and permission group management
 * Add "Sending..." notification so large messages can continue being sent in background
 * Allow to attach new apps from the chat's apps gallery
 * Fix: rotated videos are now displayed with correct aspect ratios

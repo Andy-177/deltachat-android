@@ -226,6 +226,26 @@ public class DcContext {
 
   public native int createBroadcastList();
 
+  public native int createChatroom(String name);
+
+  public native int[] getPermissionGroupIds(int chat_id);
+
+  public native String getPermissionGroupName(int chat_id, int group_id);
+
+  public native String getPermissionGroupPermissions(int chat_id, int group_id);
+
+  public native int createPermissionGroup(int chat_id, String name, String permissions);
+
+  public native int setPermissionGroup(int chat_id, int group_id, String name, String permissions);
+
+  public native int deletePermissionGroup(int chat_id, int group_id);
+
+  public native int[] getPermissionGroupMembers(int chat_id, int group_id);
+
+  public native int assignPermissionGroup(int chat_id, int group_id, int contact_id);
+
+  public native int revokePermissionGroup(int chat_id, int group_id, int contact_id);
+
   public native boolean isContactInChat(int chat_id, int contact_id);
 
   public native int addContactToChat(int chat_id, int contact_id);

@@ -253,6 +253,7 @@
     <string name="channels">頻道</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="new_channel">新頻道</string>
+    <string name="new_chatroom">新增聊天室</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel_name">頻道名稱</string>
     <!-- The number of times a message is shown in channels. Use what other messengers are using here, smth. as "N-times seen" or "1 Aufruf" (german) work as well, where "1 impression" or "1 hit" may sound too formal and may be more marketing slang. -->
@@ -416,6 +417,7 @@
         <item quantity="other">刪除您所有裝置上的%d個聊天記錄？</item>
     </plurals>
     <string name="ask_delete_named_chat">刪除您所有設備上的“%1$s”聊天 ？</string>
+    <string name="ask_delete_permission_group">刪除權限組“%1$s”？</string>
     <string name="ask_delete_message">在您的所有裝置上刪除此訊息？</string>
     <plurals name="ask_delete_messages">
         <item quantity="other">是否刪除所有裝置上的%d條訊息？</item>
@@ -522,6 +524,23 @@
     <string name="group_please_enter_group_name">請輸入群組的名稱</string>
     <string name="group_add_members">新增成員</string>
     <string name="group_self_not_in_group">你必須先加入群組，才能執行本功能。</string>
+    <!-- chatroom permission groups -->
+    <string name="permission_groups">權限組</string>
+    <string name="new_permission_group">新增權限組</string>
+    <string name="permission_group_name">權限組名稱</string>
+    <string name="permission_group_permissions">權限</string>
+    <string name="edit_permissions">編輯權限</string>
+    <string name="manage_members">管理成員</string>
+    <string name="permission_group_members">成員</string>
+    <string name="chatroom_perm_add_contact_to_chat">新增成員</string>
+    <string name="chatroom_perm_remove_contact_from_chat">移除成員</string>
+    <string name="chatroom_perm_set_chat_name">變更名稱</string>
+    <string name="chatroom_perm_set_chat_profile_image">變更頭像</string>
+    <string name="chatroom_perm_set_chat_description">變更描述</string>
+    <string name="chatroom_perm_set_pinned_message_state">置頂訊息</string>
+    <string name="chatroom_perm_set_chat_ephemeral_timer">自動銷毀訊息</string>
+    <string name="chatroom_perm_manage_permission_group">管理權限組</string>
+    <string name="chatroom_perm_assign_permission_group">分配權限組</string>
     <string name="profile_encryption">加密</string>
     <string name="profile_shared_chats">共享的對話</string>
     <!-- Separator between the list of actual members and past members -->

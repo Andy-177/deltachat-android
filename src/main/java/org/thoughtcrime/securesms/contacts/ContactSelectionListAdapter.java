@@ -199,6 +199,8 @@ public class ContactSelectionListAdapter
       title = context.getString(R.string.menu_new_classic_contact);
     } else if (id == DcContact.DC_CONTACT_ID_NEW_GROUP) {
       title = context.getString(R.string.menu_new_group);
+    } else if (id == DcContact.DC_CONTACT_ID_NEW_CHATROOM) {
+      title = context.getString(R.string.new_chatroom);
     } else if (id == DcContact.DC_CONTACT_ID_NEW_UNENCRYPTED_GROUP) {
       title = context.getString(R.string.new_email);
     } else if (id == DcContact.DC_CONTACT_ID_NEW_BROADCAST) {
