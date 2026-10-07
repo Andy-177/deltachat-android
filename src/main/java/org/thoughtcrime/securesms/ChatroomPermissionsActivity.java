@@ -119,7 +119,7 @@ public class ChatroomPermissionsActivity extends PassphraseRequiredActionBarActi
     for (int i = 0; i < groupIds.length; i++) {
       names[i] = dcContext.getPermissionGroupName(chatId, groupIds[i]);
     }
-    listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names));
+    listView.setAdapter(new ArrayAdapter<>(this, R.layout.permission_group_list_item, names));
   }
 
   private void showGroupOptions(int position) {
