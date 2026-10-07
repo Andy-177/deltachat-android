@@ -67,6 +67,10 @@ public class ChatroomPermissionsActivity extends PassphraseRequiredActionBarActi
 
     listView = ViewUtil.findById(this, R.id.permission_group_list);
     listView.setOnItemClickListener((parent, view, position, id) -> showGroupOptions(position));
+    org.thoughtcrime.securesms.components.registration.PulsingFloatingActionButton fab =
+        ViewUtil.findById(this, R.id.fab);
+    ViewUtil.applyWindowInsetsAsMargin(fab);
+    fab.setOnClickListener(v -> showGroupDialog(0));
   }
 
   @Override
@@ -78,7 +82,6 @@ public class ChatroomPermissionsActivity extends PassphraseRequiredActionBarActi
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     menu.clear();
-    getMenuInflater().inflate(R.menu.chatroom_permissions, menu);
     super.onPrepareOptionsMenu(menu);
     return true;
   }
@@ -89,9 +92,6 @@ public class ChatroomPermissionsActivity extends PassphraseRequiredActionBarActi
     int itemId = item.getItemId();
     if (itemId == android.R.id.home) {
       finish();
-      return true;
-    } else if (itemId == R.id.menu_new_permission_group) {
-      showGroupDialog(0);
       return true;
     }
 
