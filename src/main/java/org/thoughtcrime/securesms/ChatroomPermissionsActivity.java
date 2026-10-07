@@ -12,12 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import com.b44t.messenger.DcContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.thoughtcrime.securesms.connect.DcHelper;
+import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
 /** Manages the permission groups of a chatroom, see the chatroom documentation. */
@@ -56,14 +59,26 @@ public class ChatroomPermissionsActivity extends PassphraseRequiredActionBarActi
   private int chatId;
   private int[] groupIds = new int[0];
   private ListView listView;
+  private Toolbar toolbar;
+
+  @Override
+  protected void onPreCreate() {
+    dynamicTheme = new DynamicNoActionBarTheme();
+    super.onPreCreate();
+  }
 
   @Override
   protected void onCreate(Bundle state, boolean ready) {
     dcContext = DcHelper.getContext(this);
     chatId = getIntent().getIntExtra(CHAT_ID_EXTRA, 0);
     setContentView(R.layout.chatroom_permissions_activity);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    getSupportActionBar().setTitle(R.string.permission_groups);
+    this.toolbar = ViewUtil.findById(this, R.id.toolbar);
+    setSupportActionBar(this.toolbar);
+    ActionBar supportActionBar = getSupportActionBar();
+    if (supportActionBar != null) {
+      supportActionBar.setDisplayHomeAsUpEnabled(true);
+      supportActionBar.setTitle(R.string.permission_groups);
+    }
 
     listView = ViewUtil.findById(this, R.id.permission_group_list);
     listView.setOnItemClickListener((parent, view, position, id) -> showGroupOptions(position));

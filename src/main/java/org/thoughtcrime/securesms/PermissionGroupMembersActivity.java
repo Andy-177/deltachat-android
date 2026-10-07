@@ -6,8 +6,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import com.b44t.messenger.DcContext;
 import org.thoughtcrime.securesms.connect.DcHelper;
+import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
 /** Lets the user toggle which chat contacts are member of a chatroom permission group. */
@@ -21,6 +24,13 @@ public class PermissionGroupMembersActivity extends PassphraseRequiredActionBarA
   private int groupId;
   private int[] memberIds = new int[0];
   private ListView listView;
+  private Toolbar toolbar;
+
+  @Override
+  protected void onPreCreate() {
+    dynamicTheme = new DynamicNoActionBarTheme();
+    super.onPreCreate();
+  }
 
   @Override
   protected void onCreate(Bundle state, boolean ready) {
@@ -28,8 +38,13 @@ public class PermissionGroupMembersActivity extends PassphraseRequiredActionBarA
     chatId = getIntent().getIntExtra(CHAT_ID_EXTRA, 0);
     groupId = getIntent().getIntExtra(GROUP_ID_EXTRA, 0);
     setContentView(R.layout.chatroom_members_activity);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    getSupportActionBar().setTitle(R.string.permission_group_members);
+    this.toolbar = ViewUtil.findById(this, R.id.toolbar);
+    setSupportActionBar(this.toolbar);
+    ActionBar supportActionBar = getSupportActionBar();
+    if (supportActionBar != null) {
+      supportActionBar.setDisplayHomeAsUpEnabled(true);
+      supportActionBar.setTitle(R.string.permission_group_members);
+    }
 
     listView = ViewUtil.findById(this, R.id.member_list);
     listView.setOnItemClickListener((parent, view, position, id) -> toggle(position));
