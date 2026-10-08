@@ -2,7 +2,9 @@ package org.thoughtcrime.securesms;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -10,6 +12,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import com.b44t.messenger.DcContext;
 import org.thoughtcrime.securesms.connect.DcHelper;
+import org.thoughtcrime.securesms.contacts.ContactSelectionListItem;
+import org.thoughtcrime.securesms.mms.GlideApp;
 import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
@@ -23,7 +27,9 @@ public class PermissionGroupMembersActivity extends PassphraseRequiredActionBarA
   private int chatId;
   private int groupId;
   private int[] memberIds = new int[0];
+  private boolean[] memberChecked = new boolean[0];
   private ListView listView;
+  private BaseAdapter adapter;
   private Toolbar toolbar;
 
   @Override
@@ -47,6 +53,8 @@ public class PermissionGroupMembersActivity extends PassphraseRequiredActionBarA
     }
 
     listView = ViewUtil.findById(this, R.id.member_list);
+    adapter = new MembersAdapter();
+    listView.setAdapter(adapter);
     listView.setOnItemClickListener((parent, view, position, id) -> toggle(position));
     reload();
   }
@@ -65,15 +73,11 @@ public class PermissionGroupMembersActivity extends PassphraseRequiredActionBarA
   private void reload() {
     memberIds = dcContext.getChatContacts(chatId);
     int[] inGroup = dcContext.getPermissionGroupMembers(chatId, groupId);
-    String[] names = new String[memberIds.length];
+    memberChecked = new boolean[memberIds.length];
     for (int i = 0; i < memberIds.length; i++) {
-      names[i] = dcContext.getContact(memberIds[i]).getDisplayName();
+      memberChecked[i] = contains(inGroup, memberIds[i]);
     }
-    listView.setAdapter(
-        new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, names));
-    for (int i = 0; i < memberIds.length; i++) {
-      listView.setItemChecked(i, contains(inGroup, memberIds[i]));
-    }
+    adapter.notifyDataSetChanged();
   }
 
   private void toggle(int position) {
@@ -82,14 +86,53 @@ public class PermissionGroupMembersActivity extends PassphraseRequiredActionBarA
     }
     int contactId = memberIds[position];
     int result;
-    if (listView.isItemChecked(position)) {
-      result = dcContext.assignPermissionGroup(chatId, groupId, contactId);
-    } else {
+    if (memberChecked[position]) {
       result = dcContext.revokePermissionGroup(chatId, groupId, contactId);
+    } else {
+      result = dcContext.assignPermissionGroup(chatId, groupId, contactId);
     }
     if (result == 0) {
       Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show();
       reload();
+      return;
+    }
+    memberChecked[position] = !memberChecked[position];
+    adapter.notifyDataSetChanged();
+  }
+
+  private class MembersAdapter extends BaseAdapter {
+
+    @Override
+    public int getCount() {
+      return memberIds.length;
+    }
+
+    @Override
+    public Object getItem(int position) {
+      return memberIds[position];
+    }
+
+    @Override
+    public long getItemId(int position) {
+      return memberIds[position];
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+      ContactSelectionListItem view;
+      if (convertView instanceof ContactSelectionListItem) {
+        view = (ContactSelectionListItem) convertView;
+      } else {
+        view =
+            (ContactSelectionListItem)
+                getLayoutInflater().inflate(R.layout.contact_selection_list_item, parent, false);
+      }
+      view.setContact(
+          GlideApp.with(PermissionGroupMembersActivity.this),
+          dcContext.getContact(memberIds[position]),
+          true);
+      view.setChecked(memberChecked[position]);
+      return view;
     }
   }
 
