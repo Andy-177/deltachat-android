@@ -129,13 +129,16 @@ public class ChatroomPermissionsActivity extends PassphraseRequiredActionBarActi
     int groupId = groupIds[position];
     String name = dcContext.getPermissionGroupName(chatId, groupId);
     boolean builtin = groupId == OWNER_GROUP || groupId == EVERYONE_GROUP;
+    boolean isEveryone = groupId == EVERYONE_GROUP;
 
     List<String> labels = new ArrayList<>();
     List<Integer> actions = new ArrayList<>();
     labels.add(getString(R.string.edit_permissions));
     actions.add(0);
-    labels.add(getString(R.string.manage_members));
-    actions.add(1);
+    if (!isEveryone) {
+      labels.add(getString(R.string.manage_members));
+      actions.add(1);
+    }
     if (!builtin) {
       labels.add(getString(R.string.delete));
       actions.add(2);
